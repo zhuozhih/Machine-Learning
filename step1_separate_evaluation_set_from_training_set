@@ -1,0 +1,21 @@
+## we reserve 1/10 of the data to be evaluation data
+#! /usr/bin/env python3
+import numpy as np
+import pandas as pd
+train_db = pd.read_csv('training.csv')
+N = train_db.shape[0]  #25000
+## set seed
+np.random.seed(1002)
+## the indices for evaluation data
+evaluation_ind = np.random.randint(N, size=int(N/10))  
+## save the indices in a text file
+np.savetxt('evaluation_index', evaluation_ind, delimiter=',') 
+## the indices for the rest of the training data
+train1_ind = np.delete(np.arange(250000), evaluation_ind)
+## the evaluation data
+evaluation_db = train_db.iloc[evaluation_ind]
+## the training data
+train1_db = train_db.iloc[train1_ind]
+## save data to csv (with their original index labels)
+train1_db.to_csv('new_train.csv')
+evaluation_db.to_csv('evaluation.csv')
